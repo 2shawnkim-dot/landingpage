@@ -62,7 +62,7 @@ function FadeIn(props: { children: React.ReactNode; delay?: number }) {
   var ref = useFadeIn();
   return (
     <div
-      ref={ref}
+      ref={ref as React.RefObject<HTMLDivElement>}
       style={{
         opacity: 0,
         transform: "translateY(24px)",
