@@ -38,23 +38,24 @@ const C = {
 
 /* ── FADE IN ON SCROLL ── */
 function useFadeIn() {
-  var ref = useRef(null);
+  var ref = useRef<HTMLDivElement | null>(null);
   useEffect(function () {
     var el = ref.current;
     if (!el) return;
-var obs = new IntersectionObserver(
+    var obs = new IntersectionObserver(
       function (entries) {
-        if (entries[0].isIntersecting && el) {
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
+        if (entries[0].isIntersecting) {
+          (ref.current as HTMLDivElement).style.opacity = "1";
+          (ref.current as HTMLDivElement).style.transform = "translateY(0)";
         }
       },
       { threshold: 0.12 }
     );
-    if (el) obs.observe(el);
+    obs.observe(el);
     return function () { obs.disconnect(); };
   }, []);
   return ref;
+}
 }
 
 function FadeIn(props) {
