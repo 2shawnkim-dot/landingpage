@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
-/* ── COLORS ── */
 var C = {
   white: "#ffffff",
   bg: "#f8fafc",
@@ -36,46 +35,27 @@ var C = {
   cyan500: "#06b6d4",
 };
 
-/* ── FADE IN ── */
-function useFadeIn(): React.RefObject<HTMLDivElement | null> {
-  var ref = useRef<HTMLDivElement | null>(null);
-  useEffect(function () {
-    var el = ref.current;
-    if (!el) return;
+function FadeIn(props: { children: React.ReactNode; delay?: number }) {
+  var callback = function (node: HTMLDivElement | null) {
+    if (!node) return;
+    node.style.opacity = "0";
+    node.style.transform = "translateY(24px)";
+    node.style.transition = "all 0.7s cubic-bezier(0.4,0,0.2,1)";
+    node.style.transitionDelay = (props.delay || 0) + "ms";
     var obs = new IntersectionObserver(
       function (entries: IntersectionObserverEntry[]) {
-        var target = ref.current;
-        if (entries[0].isIntersecting && target) {
-          target.style.opacity = "1";
-          target.style.transform = "translateY(0)";
+        if (entries[0].isIntersecting) {
+          node.style.opacity = "1";
+          node.style.transform = "translateY(0)";
         }
       },
       { threshold: 0.12 }
     );
-    obs.observe(el);
-    return function () { obs.disconnect(); };
-  }, []);
-  return ref;
+    obs.observe(node);
+  };
+  return <div ref={callback}>{props.children}</div>;
 }
 
-function FadeIn(props: { children: React.ReactNode; delay?: number }) {
-  var ref = useFadeIn();
-  return (
-    <div
-      ref={ref as React.RefObject<HTMLDivElement>}
-      style={{
-        opacity: 0,
-        transform: "translateY(24px)",
-        transition: "all 0.7s cubic-bezier(0.4,0,0.2,1)",
-        transitionDelay: (props.delay || 0) + "ms",
-      }}
-    >
-      {props.children}
-    </div>
-  );
-}
-
-/* ── NAVBAR ── */
 function Nav() {
   return (
     <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", background: "rgba(255,255,255,0.8)", borderBottom: "1px solid " + C.gray200 }}>
@@ -99,7 +79,6 @@ function Nav() {
   );
 }
 
-/* ── HERO ── */
 function Hero() {
   return (
     <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", paddingTop: 64, background: "linear-gradient(180deg, " + C.gray50 + " 0%, " + C.white + " 40%, " + C.violet50 + "40 100%)" }}>
@@ -166,7 +145,6 @@ function Hero() {
   );
 }
 
-/* ── PROBLEM ── */
 var problems = [
   { icon: "\u23F0", title: "Infinite scrolling, zero connection", desc: "The average user spends 90 minutes per day swiping. Apps keep you scrolling, not connecting." },
   { icon: "\uD83D\uDCB0", title: "Optimized for revenue, not love", desc: "Dating apps earn more when you stay single. Their model is misaligned with finding a partner." },
@@ -205,7 +183,6 @@ function Problem() {
   );
 }
 
-/* ── HOW IT WORKS ── */
 var steps = [
   { num: "01", title: "Discover Your Blueprint", desc: "Complete a research-backed psychological assessment mapping attachment style, core values, communication patterns, and relationship goals.", c1: C.violet500, c2: C.indigo500 },
   { num: "02", title: "AI Compatibility Scoring", desc: "Our engine analyzes 54 dimensions of compatibility. Not who looks good on paper \u2014 who will work under real conditions.", c1: C.indigo500, c2: C.blue500 },
@@ -241,7 +218,6 @@ function HowItWorks() {
   );
 }
 
-/* ── SCIENCE ── */
 var features = [
   { title: "Attachment Theory Modeling", desc: "We identify your attachment style and match you with partners whose patterns complement yours for secure, lasting bonds.", grad: "linear-gradient(135deg, " + C.rose500 + ", #ec4899)" },
   { title: "Core Values Alignment", desc: "We map deep value structures \u2014 what you build your life around \u2014 and find true alignment beyond surface preferences.", grad: "linear-gradient(135deg, " + C.orange500 + ", #f59e0b)" },
@@ -288,7 +264,6 @@ function Science() {
   );
 }
 
-/* ── SOCIAL PROOF ── */
 var testimonials = [
   { quote: "I was so burned out I almost gave up. My first Intentional match became my first real relationship in three years.", name: "Sarah K.", detail: "Matched in Week 2", av: "S" },
   { quote: "The compatibility breakdown was eerily accurate. It predicted every tension point and gave us tools to handle them.", name: "James R.", detail: "Partnership tier", av: "J" },
@@ -331,7 +306,6 @@ function SocialProof() {
   );
 }
 
-/* ── FINAL CTA ── */
 function FinalCTA() {
   return (
     <section id="waitlist" style={{ position: "relative", padding: "128px 0", overflow: "hidden" }}>
@@ -363,7 +337,6 @@ function FinalCTA() {
   );
 }
 
-/* ── FOOTER ── */
 function Footer() {
   return (
     <footer style={{ padding: "48px 0", background: C.gray950, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
@@ -384,7 +357,6 @@ function Footer() {
   );
 }
 
-/* ── PAGE ── */
 export default function Page() {
   return (
     <>
