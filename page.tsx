@@ -58,7 +58,7 @@ function useFadeIn() {
 }
 
 
-function FadeIn(props) {
+function FadeIn(props: { children: React.ReactNode; delay?: number }) {
   var ref = useFadeIn();
   return (
     <div
