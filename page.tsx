@@ -42,16 +42,16 @@ function useFadeIn() {
   useEffect(function () {
     var el = ref.current;
     if (!el) return;
-    var obs = new IntersectionObserver(
+var obs = new IntersectionObserver(
       function (entries) {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && el) {
           el.style.opacity = "1";
           el.style.transform = "translateY(0)";
         }
       },
       { threshold: 0.12 }
     );
-    obs.observe(el);
+    if (el) obs.observe(el);
     return function () { obs.disconnect(); };
   }, []);
   return ref;
