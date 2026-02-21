@@ -37,8 +37,8 @@ var C = {
 };
 
 /* ── FADE IN ── */
-function useFadeIn(): React.RefObject<HTMLDivElement | null> {
-  var ref = useRef<HTMLDivElement | null>(null);
+function useFadeIn() {
+  var ref = useRef<HTMLDivElement>(null);
   useEffect(function () {
     var el = ref.current;
     if (!el) return;
