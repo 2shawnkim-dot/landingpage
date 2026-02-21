@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
-/* ── COLORS & TOKENS ── */
-const C = {
+/* ── COLORS ── */
+var C = {
   white: "#ffffff",
   bg: "#f8fafc",
   gray50: "#f8fafc",
@@ -36,17 +36,18 @@ const C = {
   cyan500: "#06b6d4",
 };
 
-/* ── FADE IN ON SCROLL ── */
-function useFadeIn() {
+/* ── FADE IN ── */
+function useFadeIn(): React.RefObject<HTMLDivElement | null> {
   var ref = useRef<HTMLDivElement | null>(null);
   useEffect(function () {
     var el = ref.current;
     if (!el) return;
     var obs = new IntersectionObserver(
-      function (entries) {
-        if (entries[0].isIntersecting) {
-          (ref.current as HTMLDivElement).style.opacity = "1";
-          (ref.current as HTMLDivElement).style.transform = "translateY(0)";
+      function (entries: IntersectionObserverEntry[]) {
+        var target = ref.current;
+        if (entries[0].isIntersecting && target) {
+          target.style.opacity = "1";
+          target.style.transform = "translateY(0)";
         }
       },
       { threshold: 0.12 }
@@ -56,7 +57,6 @@ function useFadeIn() {
   }, []);
   return ref;
 }
-
 
 function FadeIn(props: { children: React.ReactNode; delay?: number }) {
   var ref = useFadeIn();
@@ -78,62 +78,19 @@ function FadeIn(props: { children: React.ReactNode; delay?: number }) {
 /* ── NAVBAR ── */
 function Nav() {
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-        background: "rgba(255,255,255,0.8)",
-        borderBottom: "1px solid " + C.gray200,
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 1120,
-          margin: "0 auto",
-          padding: "0 24px",
-          height: 64,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", background: "rgba(255,255,255,0.8)", borderBottom: "1px solid " + C.gray200 }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 8,
-              background: "linear-gradient(135deg, " + C.violet600 + ", " + C.indigo600 + ")",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg, " + C.violet600 + ", " + C.indigo600 + ")", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ color: C.white, fontSize: 14, fontWeight: 700 }}>I</span>
           </div>
-          <span style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.02em", color: C.gray900 }}>
-            Intentional
-          </span>
+          <span style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.02em", color: C.gray900 }}>Intentional</span>
         </a>
         <a
           href="#waitlist"
-          style={{
-            fontSize: 13,
-            fontWeight: 600,
-            padding: "8px 20px",
-            borderRadius: 9999,
-            background: C.gray900,
-            color: C.white,
-            textDecoration: "none",
-            transition: "all 0.2s",
-          }}
-          onMouseEnter={function (e) { e.currentTarget.style.background = C.gray700; }}
-          onMouseLeave={function (e) { e.currentTarget.style.background = C.gray900; }}
+          style={{ fontSize: 13, fontWeight: 600, padding: "8px 20px", borderRadius: 9999, background: C.gray900, color: C.white, textDecoration: "none", transition: "all 0.2s" }}
+          onMouseEnter={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.background = C.gray700; }}
+          onMouseLeave={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.background = C.gray900; }}
         >
           Get Early Access
         </a>
@@ -145,23 +102,9 @@ function Nav() {
 /* ── HERO ── */
 function Hero() {
   return (
-    <section
-      style={{
-        position: "relative",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-        paddingTop: 64,
-        background: "linear-gradient(180deg, " + C.gray50 + " 0%, " + C.white + " 40%, " + C.violet50 + "40 100%)",
-      }}
-    >
-      {/* Orbs */}
+    <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", paddingTop: 64, background: "linear-gradient(180deg, " + C.gray50 + " 0%, " + C.white + " 40%, " + C.violet50 + "40 100%)" }}>
       <div style={{ position: "absolute", width: 600, height: 600, top: -200, right: -200, borderRadius: "50%", background: "radial-gradient(circle, " + C.violet400 + ", " + C.indigo500 + ", transparent)", filter: "blur(80px)", opacity: 0.15, pointerEvents: "none" }} />
       <div style={{ position: "absolute", width: 400, height: 400, bottom: -100, left: -150, borderRadius: "50%", background: "radial-gradient(circle, " + C.violet400 + ", " + C.indigo500 + ", transparent)", filter: "blur(80px)", opacity: 0.08, pointerEvents: "none" }} />
-
-      {/* Dot grid */}
       <div style={{ position: "absolute", inset: 0, opacity: 0.03, backgroundImage: "radial-gradient(circle, " + C.indigo500 + " 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
 
       <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
@@ -193,17 +136,17 @@ function Hero() {
             <a
               href="#waitlist"
               style={{ display: "inline-flex", alignItems: "center", padding: "14px 32px", borderRadius: 9999, background: "linear-gradient(to right, " + C.violet600 + ", " + C.indigo600 + ")", color: C.white, fontSize: 14, fontWeight: 600, textDecoration: "none", boxShadow: "0 8px 30px rgba(124,58,237,0.25)", transition: "all 0.3s" }}
-              onMouseEnter={function (e) { e.currentTarget.style.boxShadow = "0 12px 40px rgba(124,58,237,0.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={function (e) { e.currentTarget.style.boxShadow = "0 8px 30px rgba(124,58,237,0.25)"; e.currentTarget.style.transform = "translateY(0)"; }}
+              onMouseEnter={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.boxShadow = "0 12px 40px rgba(124,58,237,0.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.boxShadow = "0 8px 30px rgba(124,58,237,0.25)"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
               Take the Compatibility Preview
-              <span style={{ marginLeft: 8 }}>&rarr;</span>
+              <span style={{ marginLeft: 8 }}>{"\u2192"}</span>
             </a>
             <a
               href="#how"
               style={{ display: "inline-flex", alignItems: "center", padding: "14px 32px", borderRadius: 9999, background: C.white, color: C.gray700, fontSize: 14, fontWeight: 600, textDecoration: "none", border: "1px solid " + C.gray200, transition: "all 0.2s" }}
-              onMouseEnter={function (e) { e.currentTarget.style.borderColor = C.gray300; e.currentTarget.style.background = C.gray50; }}
-              onMouseLeave={function (e) { e.currentTarget.style.borderColor = C.gray200; e.currentTarget.style.background = C.white; }}
+              onMouseEnter={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.borderColor = C.gray300; e.currentTarget.style.background = C.gray50; }}
+              onMouseLeave={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.borderColor = C.gray200; e.currentTarget.style.background = C.white; }}
             >
               See How It Works
             </a>
@@ -212,18 +155,12 @@ function Hero() {
 
         <FadeIn delay={450}>
           <div style={{ marginTop: 48, display: "flex", alignItems: "center", justifyContent: "center", gap: 24, fontSize: 12, color: C.gray400, fontWeight: 500, flexWrap: "wrap" }}>
-            {["Research-backed", "Privacy-first", "Invite-only"].map(function (t) {
-              return (
-                <span key={t} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ color: C.emerald500, fontSize: 14 }}>&#10003;</span>
-                  {t}
-                </span>
-              );
+            {["Research-backed", "Privacy-first", "Invite-only"].map(function (t: string) {
+              return <span key={t} style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ color: C.emerald500, fontSize: 14 }}>{"\u2713"}</span>{t}</span>;
             })}
           </div>
         </FadeIn>
       </div>
-
       <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}`}</style>
     </section>
   );
@@ -246,19 +183,16 @@ function Problem() {
             <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 800, color: C.gray900, letterSpacing: "-0.025em", margin: 0 }}>Dating apps are broken by design.</h2>
           </div>
         </FadeIn>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
-          {problems.map(function (p, i) {
+          {problems.map(function (p: { icon: string; title: string; desc: string }, i: number) {
             return (
               <FadeIn key={i} delay={i * 120}>
                 <div
                   style={{ padding: 32, borderRadius: 20, background: C.gray50, border: "1px solid " + C.gray100, transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)", cursor: "default" }}
-                  onMouseEnter={function (e) { var t = e.currentTarget; t.style.background = C.white; t.style.boxShadow = "0 20px 60px rgba(0,0,0,0.07)"; t.style.transform = "translateY(-4px)"; t.style.borderColor = C.gray200; }}
-                  onMouseLeave={function (e) { var t = e.currentTarget; t.style.background = C.gray50; t.style.boxShadow = "none"; t.style.transform = "translateY(0)"; t.style.borderColor = C.gray100; }}
+                  onMouseEnter={function (e: React.MouseEvent<HTMLDivElement>) { var t = e.currentTarget; t.style.background = C.white; t.style.boxShadow = "0 20px 60px rgba(0,0,0,0.07)"; t.style.transform = "translateY(-4px)"; t.style.borderColor = C.gray200; }}
+                  onMouseLeave={function (e: React.MouseEvent<HTMLDivElement>) { var t = e.currentTarget; t.style.background = C.gray50; t.style.boxShadow = "none"; t.style.transform = "translateY(0)"; t.style.borderColor = C.gray100; }}
                 >
-                  <div style={{ width: 48, height: 48, borderRadius: 14, background: C.violet100, color: C.violet600, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, marginBottom: 20, transition: "all 0.3s" }}>
-                    {p.icon}
-                  </div>
+                  <div style={{ width: 48, height: 48, borderRadius: 14, background: C.violet100, color: C.violet600, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, marginBottom: 20 }}>{p.icon}</div>
                   <h3 style={{ fontSize: 18, fontWeight: 700, color: C.gray900, marginBottom: 12 }}>{p.title}</h3>
                   <p style={{ fontSize: 14, color: C.gray500, lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
                 </div>
@@ -273,9 +207,9 @@ function Problem() {
 
 /* ── HOW IT WORKS ── */
 var steps = [
-  { num: "01", title: "Discover Your Blueprint", desc: "Complete a research-backed psychological assessment mapping attachment style, core values, communication patterns, and relationship goals.", color1: C.violet500, color2: C.indigo500 },
-  { num: "02", title: "AI Compatibility Scoring", desc: "Our engine analyzes 54 dimensions of compatibility. Not who looks good on paper \u2014 who will work under real conditions.", color1: C.indigo500, color2: C.blue500 },
-  { num: "03", title: "Curated Introductions", desc: "Receive 3\u20135 deeply compatible matches per week, each with a compatibility narrative and conversation starters.", color1: C.blue500, color2: C.cyan500 },
+  { num: "01", title: "Discover Your Blueprint", desc: "Complete a research-backed psychological assessment mapping attachment style, core values, communication patterns, and relationship goals.", c1: C.violet500, c2: C.indigo500 },
+  { num: "02", title: "AI Compatibility Scoring", desc: "Our engine analyzes 54 dimensions of compatibility. Not who looks good on paper \u2014 who will work under real conditions.", c1: C.indigo500, c2: C.blue500 },
+  { num: "03", title: "Curated Introductions", desc: "Receive 3\u20135 deeply compatible matches per week, each with a compatibility narrative and conversation starters.", c1: C.blue500, c2: C.cyan500 },
 ];
 
 function HowItWorks() {
@@ -288,16 +222,15 @@ function HowItWorks() {
             <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 800, color: C.gray900, letterSpacing: "-0.025em", margin: 0 }}>Three steps to meaningful connection.</h2>
           </div>
         </FadeIn>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 32 }}>
-          {steps.map(function (s, i) {
+          {steps.map(function (s: { num: string; title: string; desc: string; c1: string; c2: string }, i: number) {
             return (
               <FadeIn key={i} delay={i * 150}>
                 <div>
-                  <span style={{ fontSize: 56, fontWeight: 900, background: "linear-gradient(135deg, " + s.color1 + ", " + s.color2 + ")", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", opacity: 0.2, display: "block", lineHeight: 1 }}>{s.num}</span>
+                  <span style={{ fontSize: 56, fontWeight: 900, background: "linear-gradient(135deg, " + s.c1 + ", " + s.c2 + ")", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", opacity: 0.2, display: "block", lineHeight: 1 }}>{s.num}</span>
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: C.gray900, marginTop: 8, marginBottom: 12 }}>{s.title}</h3>
                   <p style={{ fontSize: 14, color: C.gray500, lineHeight: 1.7, margin: 0 }}>{s.desc}</p>
-                  <div style={{ marginTop: 24, height: 4, width: 48, borderRadius: 2, background: "linear-gradient(to right, " + s.color1 + ", " + s.color2 + ")" }} />
+                  <div style={{ marginTop: 24, height: 4, width: 48, borderRadius: 2, background: "linear-gradient(to right, " + s.c1 + ", " + s.c2 + ")" }} />
                 </div>
               </FadeIn>
             );
@@ -319,31 +252,26 @@ var features = [
 function Science() {
   return (
     <section id="science" style={{ padding: "112px 0", background: C.white }}>
-      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr", gap: 64 }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px" }}>
         <FadeIn>
-          <div style={{ maxWidth: 500 }}>
+          <div style={{ maxWidth: 500, marginBottom: 64 }}>
             <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2em", color: C.violet600, marginBottom: 16 }}>The Science</p>
-            <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 800, color: C.gray900, letterSpacing: "-0.025em", lineHeight: 1.15, margin: "0 0 24px" }}>
-              Matching built on relationship science, not swipe velocity.
-            </h2>
-            <p style={{ fontSize: 16, color: C.gray500, lineHeight: 1.7, margin: "0 0 32px" }}>
-              Instead of asking &ldquo;Are they attractive?&rdquo; we ask: &ldquo;Will this dynamic sustain under stress five years from now?&rdquo;
-            </p>
+            <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 800, color: C.gray900, letterSpacing: "-0.025em", lineHeight: 1.15, margin: "0 0 24px" }}>Matching built on relationship science, not swipe velocity.</h2>
+            <p style={{ fontSize: 16, color: C.gray500, lineHeight: 1.7, margin: "0 0 32px" }}>Instead of asking &ldquo;Are they attractive?&rdquo; we ask: &ldquo;Will this dynamic sustain under stress five years from now?&rdquo;</p>
             <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 13, color: C.gray400 }}>
               <div style={{ width: 32, height: 1, background: C.gray300 }} />
               Based on Gottman, Bowlby, and Schwartz research
             </div>
           </div>
         </FadeIn>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
-          {features.map(function (f, i) {
+          {features.map(function (f: { title: string; desc: string; grad: string }, i: number) {
             return (
               <FadeIn key={i} delay={i * 100}>
                 <div
                   style={{ padding: 24, borderRadius: 20, background: C.gray50, border: "1px solid " + C.gray100, display: "flex", alignItems: "flex-start", gap: 16, transition: "all 0.5s", cursor: "default" }}
-                  onMouseEnter={function (e) { e.currentTarget.style.background = C.white; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.06)"; }}
-                  onMouseLeave={function (e) { e.currentTarget.style.background = C.gray50; e.currentTarget.style.boxShadow = "none"; }}
+                  onMouseEnter={function (e: React.MouseEvent<HTMLDivElement>) { e.currentTarget.style.background = C.white; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.06)"; }}
+                  onMouseLeave={function (e: React.MouseEvent<HTMLDivElement>) { e.currentTarget.style.background = C.gray50; e.currentTarget.style.boxShadow = "none"; }}
                 >
                   <div style={{ width: 40, height: 40, borderRadius: 12, background: f.grad, flexShrink: 0, marginTop: 2 }} />
                   <div>
@@ -377,14 +305,13 @@ function SocialProof() {
             <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 800, color: C.gray900, letterSpacing: "-0.025em", margin: 0 }}>Real people. Real alignment.</h2>
           </div>
         </FadeIn>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
-          {testimonials.map(function (t, i) {
+          {testimonials.map(function (t: { quote: string; name: string; detail: string; av: string }, i: number) {
             return (
               <FadeIn key={i} delay={i * 120}>
-                <div style={{ padding: 32, borderRadius: 20, background: C.white, border: "1px solid " + C.gray100, boxShadow: "0 1px 3px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", height: "100%" }}>
+                <div style={{ padding: 32, borderRadius: 20, background: C.white, border: "1px solid " + C.gray100, boxShadow: "0 1px 3px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column" as const, height: "100%" }}>
                   <div style={{ display: "flex", gap: 3, marginBottom: 20 }}>
-                    {[0, 1, 2, 3, 4].map(function (j) { return <span key={j} style={{ color: C.amber400, fontSize: 16 }}>{"\u2605"}</span>; })}
+                    {[0, 1, 2, 3, 4].map(function (j: number) { return <span key={j} style={{ color: C.amber400, fontSize: 16 }}>{"\u2605"}</span>; })}
                   </div>
                   <p style={{ fontSize: 14, color: C.gray600, lineHeight: 1.7, flex: 1 }}>&ldquo;{t.quote}&rdquo;</p>
                   <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid " + C.gray100, display: "flex", alignItems: "center", gap: 12 }}>
@@ -415,28 +342,21 @@ function FinalCTA() {
       <div style={{ position: "relative", maxWidth: 700, margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
         <FadeIn>
           <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2em", color: C.violet400, marginBottom: 24 }}>Founding Cohort</p>
-          <h2 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 800, color: C.white, letterSpacing: "-0.03em", lineHeight: 1.1, margin: "0 0 24px" }}>
-            Stop settling for algorithms designed to keep you single.
-          </h2>
-          <p style={{ fontSize: 18, color: C.gray400, maxWidth: 520, margin: "0 auto", lineHeight: 1.65 }}>
-            Lifetime premium pricing, priority matching, and expanded insights for founding members.
-          </p>
+          <h2 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 800, color: C.white, letterSpacing: "-0.03em", lineHeight: 1.1, margin: "0 0 24px" }}>Stop settling for algorithms designed to keep you single.</h2>
+          <p style={{ fontSize: 18, color: C.gray400, maxWidth: 520, margin: "0 auto", lineHeight: 1.65 }}>Lifetime premium pricing, priority matching, and expanded insights for founding members.</p>
         </FadeIn>
-
         <FadeIn delay={200}>
           <div style={{ marginTop: 40 }}>
             <a
               href="#"
               style={{ display: "inline-flex", alignItems: "center", padding: "16px 40px", borderRadius: 9999, background: "linear-gradient(to right, " + C.violet500 + ", " + C.indigo500 + ")", color: C.white, fontSize: 14, fontWeight: 600, textDecoration: "none", boxShadow: "0 12px 40px rgba(139,92,246,0.25)", transition: "all 0.3s" }}
-              onMouseEnter={function (e) { e.currentTarget.style.boxShadow = "0 16px 50px rgba(139,92,246,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={function (e) { e.currentTarget.style.boxShadow = "0 12px 40px rgba(139,92,246,0.25)"; e.currentTarget.style.transform = "translateY(0)"; }}
+              onMouseEnter={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.boxShadow = "0 16px 50px rgba(139,92,246,0.45)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={function (e: React.MouseEvent<HTMLAnchorElement>) { e.currentTarget.style.boxShadow = "0 12px 40px rgba(139,92,246,0.25)"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              Apply for Early Access <span style={{ marginLeft: 8 }}>&rarr;</span>
+              Apply for Early Access <span style={{ marginLeft: 8 }}>{"\u2192"}</span>
             </a>
           </div>
-          <p style={{ marginTop: 20, fontSize: 12, color: C.gray600 }}>
-            Applications reviewed for community quality. Limited spots per city.
-          </p>
+          <p style={{ marginTop: 20, fontSize: 12, color: C.gray600 }}>Applications reviewed for community quality. Limited spots per city.</p>
         </FadeIn>
       </div>
     </section>
@@ -454,9 +374,7 @@ function Footer() {
           </div>
           <span style={{ fontSize: 13, color: C.gray500 }}>Intentional</span>
         </div>
-        <p style={{ fontSize: 13, color: C.gray600, margin: 0 }}>
-          Swipe apps gamified attraction. We&rsquo;re engineering compatibility.
-        </p>
+        <p style={{ fontSize: 13, color: C.gray600, margin: 0 }}>Swipe apps gamified attraction. We&rsquo;re engineering compatibility.</p>
         <div style={{ display: "flex", gap: 24, fontSize: 12, color: C.gray600 }}>
           <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Privacy</a>
           <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Terms</a>
