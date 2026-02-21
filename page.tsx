@@ -56,7 +56,7 @@ function useFadeIn() {
   }, []);
   return ref;
 }
-}
+
 
 function FadeIn(props) {
   var ref = useFadeIn();
